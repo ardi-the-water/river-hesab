@@ -66,6 +66,7 @@ async function displayItems() {
                 <td data-label="قیمت خرید">${formatPrice(item.purchasePrice)}</td>
                 <td data-label="قیمت فروش">${formatPrice(item.sellPrice)}</td>
                 <td data-label="عملیات">
+                    <button onclick="editItem(${item.id}, '${item.name}', ${item.purchasePrice}, ${item.sellPrice})">ویرایش</button>
                     <button onclick="deleteItem(${item.id})">حذف</button>
                 </td>
             </tr>
@@ -78,6 +79,26 @@ async function deleteItem(id) {
     if (confirm('آیا از حذف این آیتم مطمئن هستید؟')) {
         await remove('items', id);
         await displayItems();
+    }
+}
+
+async function editItem(id, currentName, currentPurchasePrice, currentSellPrice) {
+    const newName = prompt("نام جدید آیتم را وارد کنید:", currentName);
+    const newPurchasePrice = parseFloat(prompt("قیمت خرید جدید را وارد کنید:", currentPurchasePrice));
+    const newSellPrice = parseFloat(prompt("قیمت فروش جدید را وارد کنید:", currentSellPrice));
+
+    if (newName && !isNaN(newPurchasePrice) && !isNaN(newSellPrice)) {
+        const updatedItem = {
+            id,
+            name: newName,
+            purchasePrice: newPurchasePrice,
+            sellPrice: newSellPrice
+        };
+        await update('items', updatedItem);
+        await displayItems();
+    } else if (newName || !isNaN(newPurchasePrice) || !isNaN(newSellPrice)) {
+        // Handle case where user cancels one prompt but not others
+        alert('ویرایش لغو شد. لطفا تمام مقادیر را به درستی وارد کنید.');
     }
 }
 
