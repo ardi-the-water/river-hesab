@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابداری کافه - تنظیمات</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>حسابداری کافه</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">سفارش گیری</a></li>
+                <li><a href="orders.html">سفارش ها و فیش ها</a></li>
+                <li><a href="items.html">آیتم ها</a></li>
+                <li><a href="settings.html" class="active">تنظیمات</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="settings-section">
+            <h2>تنظیمات</h2>
+            <div class="setting-item">
+                <label for="cafe-name">نام کافه (برای چاپ فیش):</label>
+                <input type="text" id="cafe-name">
+                <button id="save-settings">ذخیره تنظیمات</button>
+            </div>
+            <hr>
+            <div class="setting-item">
+                <h3>پشتیبان گیری و بازیابی</h3>
+                <button id="export-json">دانلود فایل پشتیبان (JSON)</button>
+                <label for="import-json">بازیابی از فایل پشتیبان:</label>
+                <input type="file" id="import-json" accept=".json">
+            </div>
+        </section>
+    </main>
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

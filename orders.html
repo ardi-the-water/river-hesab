@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابداری کافه - سفارش ها و فیش ها</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>حسابداری کافه</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">سفارش گیری</a></li>
+                <li><a href="orders.html" class="active">سفارش ها و فیش ها</a></li>
+                <li><a href="items.html">آیتم ها</a></li>
+                <li><a href="settings.html">تنظیمات</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="orders-section">
+            <h2>لیست سفارش ها و فیش ها</h2>
+            <button id="export-csv">خروجی CSV برای اکسل</button>
+            <table id="orders-table">
+                <thead>
+                    <tr>
+                        <th>شماره فیش</th>
+                        <th>تاریخ و ساعت</th>
+                        <th>مبلغ کل</th>
+                        <th>تخفیف</th>
+                        <th>مبلغ نهایی</th>
+                        <th>یادداشت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- اطلاعات فیش ها به صورت داینامیک اینجا اضافه می شوند -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
