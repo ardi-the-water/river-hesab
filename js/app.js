@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // To change the password, modify the value of 'correctPassword'
+    const correctPassword = '1234';
+    const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+
+    if (!isAuthenticated) {
+        const password = prompt('لطفا رمز عبور را وارد کنید:');
+        if (password === correctPassword) {
+            sessionStorage.setItem('isAuthenticated', 'true');
+        } else {
+            alert('رمز عبور اشتباه است.');
+            document.body.innerHTML = '<h1>دسترسی غیرمجاز</h1>';
+            return;
+        }
+    }
+
     try {
         await openDB();
         const page = window.location.pathname.split("/").pop();
