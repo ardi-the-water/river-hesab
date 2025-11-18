@@ -60,18 +60,18 @@ async function displayItems() {
     const items = await getAll('items');
     itemsTableBody.innerHTML = '';
     items.forEach(item => {
-        const row = `
-            <tr>
-                <td data-label="نام آیتم">${item.name}</td>
-                <td data-label="قیمت خرید">${formatPrice(item.purchasePrice)}</td>
-                <td data-label="قیمت فروش">${formatPrice(item.sellPrice)}</td>
-                <td data-label="عملیات">
-                    <button onclick="editItem(${item.id}, '${item.name}', ${item.purchasePrice}, ${item.sellPrice})">ویرایش</button>
-                    <button onclick="deleteItem(${item.id})">حذف</button>
-                </td>
-            </tr>
+        const row = document.createElement('tr');
+        row.setAttribute('data-id', item.id);
+        row.innerHTML = `
+            <td data-label="نام آیتم">${item.name}</td>
+            <td data-label="قیمت خرید">${formatPrice(item.purchasePrice)}</td>
+            <td data-label="قیمت فروش">${formatPrice(item.sellPrice)}</td>
+            <td data-label="عملیات">
+                <button onclick="toggleEditMode(${item.id})">ویرایش</button>
+                <button onclick="deleteItem(${item.id})">حذف</button>
+            </td>
         `;
-        itemsTableBody.innerHTML += row;
+        itemsTableBody.appendChild(row);
     });
 }
 
@@ -82,23 +82,36 @@ async function deleteItem(id) {
     }
 }
 
-async function editItem(id, currentName, currentPurchasePrice, currentSellPrice) {
-    const newName = prompt("نام جدید آیتم را وارد کنید:", currentName);
-    const newPurchasePrice = parseFloat(prompt("قیمت خرید جدید را وارد کنید:", currentPurchasePrice));
-    const newSellPrice = parseFloat(prompt("قیمت فروش جدید را وارد کنید:", currentSellPrice));
+function toggleEditMode(id) {
+    const row = document.querySelector(`tr[data-id='${id}']`);
+    const cells = row.querySelectorAll('td');
+    
+    const name = cells[0].textContent;
+    const purchasePrice = parseFloat(cells[1].textContent.replace(/,/g, ''));
+    const sellPrice = parseFloat(cells[2].textContent.replace(/,/g, ''));
+
+    row.innerHTML = `
+        <td data-label="نام آیتم"><input type="text" value="${name}" id="edit-name-${id}"></td>
+        <td data-label="قیمت خرید"><input type="number" value="${purchasePrice}" id="edit-purchase-${id}"></td>
+        <td data-label="قیمت فروش"><input type="number" value="${sellPrice}" id="edit-sell-${id}"></td>
+        <td data-label="عملیات">
+            <button onclick="updateItem(${id})">ذخیره</button>
+            <button onclick="displayItems()">لغو</button>
+        </td>
+    `;
+}
+
+async function updateItem(id) {
+    const newName = document.getElementById(`edit-name-${id}`).value;
+    const newPurchasePrice = parseFloat(document.getElementById(`edit-purchase-${id}`).value);
+    const newSellPrice = parseFloat(document.getElementById(`edit-sell-${id}`).value);
 
     if (newName && !isNaN(newPurchasePrice) && !isNaN(newSellPrice)) {
-        const updatedItem = {
-            id,
-            name: newName,
-            purchasePrice: newPurchasePrice,
-            sellPrice: newSellPrice
-        };
+        const updatedItem = { id, name: newName, purchasePrice: newPurchasePrice, sellPrice: newSellPrice };
         await update('items', updatedItem);
         await displayItems();
-    } else if (newName || !isNaN(newPurchasePrice) || !isNaN(newSellPrice)) {
-        // Handle case where user cancels one prompt but not others
-        alert('ویرایش لغو شد. لطفا تمام مقادیر را به درستی وارد کنید.');
+    } else {
+        alert('لطفا تمام فیلدها را به درستی پر کنید.');
     }
 }
 
@@ -307,6 +320,7 @@ async function displayOrders() {
     if (!ordersTableBody) return;
 
     const orders = await getAll('orders');
+    orders.sort((a, b) => b.id - a.id); // Sort by ID descending
     ordersTableBody.innerHTML = '';
     orders.forEach(order => {
         const row = `
